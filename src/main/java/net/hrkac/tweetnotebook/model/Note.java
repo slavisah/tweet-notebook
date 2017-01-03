@@ -25,16 +25,16 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "creation_time", nullable = false)
+    @Column(name = "created_on", nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime creationTime;
+    private DateTime createdOn;
 
     @Column(name = "text", nullable = true, length = MAX_LENGTH_TEXT)
     private String text;
 
-    @Column(name = "modification_time", nullable = false)
+    @Column(name = "modified_on", nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime modificationTime;
+    private DateTime modifiedOn;
 
     @Column(name = "title", nullable = false, length = MAX_LENGTH_TITLE)
     private String title;
@@ -59,16 +59,16 @@ public class Note {
         return id;
     }
 
-    public DateTime getCreationTime() {
-        return creationTime;
+    public DateTime getCreatedOn() {
+        return createdOn;
     }
 
     public String getText() {
         return text;
     }
 
-    public DateTime getModificationTime() {
-        return modificationTime;
+    public DateTime getModifiedOn() {
+        return modifiedOn;
     }
 
     public String getTitle() {
@@ -82,13 +82,13 @@ public class Note {
     @PrePersist
     public void prePersist() {
         DateTime now = DateTime.now();
-        creationTime = now;
-        modificationTime = now;
+        createdOn = now;
+        modifiedOn = now;
     }
 
     @PreUpdate
     public void preUpdate() {
-        modificationTime = DateTime.now();
+        modifiedOn = DateTime.now();
     }
 
     public void update(String description, String title) {
