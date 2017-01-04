@@ -11,7 +11,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 public class ExampleApplicationConfig implements WebApplicationInitializer {
     private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
-    private static final String DISPATCHER_SERVLET_MAPPING = "/";
+    private static final String DISPATCHER_SERVLET_MAPPING = "/tweetnotebook";
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {

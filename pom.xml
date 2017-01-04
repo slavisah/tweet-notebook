@@ -25,7 +25,25 @@
 		<jsonpath.version>0.8.1</jsonpath.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		<swagger.version>2.4.0</swagger.version>
+		<build.profile.id>dev</build.profile.id>
 	</properties>
+	
+	<profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <build.profile.id>dev</build.profile.id>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-test</id>
+            <properties>
+                <build.profile.id>integration-test</build.profile.id>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.unit.tests>true</skip.unit.tests>
+            </properties>
+        </profile>
+    </profiles>
 
 	<dependencies>
 		<dependency>
@@ -92,11 +110,13 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${swagger.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -111,6 +131,9 @@
 	</dependencies>
 
 	<build>
+		<filters>
+            <filter>profiles/${build.profile.id}/config.properties</filter>
+        </filters>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

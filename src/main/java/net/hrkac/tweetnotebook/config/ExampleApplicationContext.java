@@ -6,7 +6,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
 @ComponentScan(basePackages = {"net.hrkac.tweetnotebook.service"})
-@Import({WebAppContext.class, PersistenceContext.class})
+@Import({PersistenceContext.class, WebAppContext.class})
 @PropertySource("classpath:application.properties")
 public class ExampleApplicationContext {
 
