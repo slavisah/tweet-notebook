@@ -17,17 +17,17 @@ import net.hrkac.tweetnotebook.service.NoteService;
 public class NoteController {
     
     @Autowired
-    private NoteService service;
+    private NoteService noteService;
     
 //    @Autowired
-//    public TodoController(TodoService service) {
-//        this.service = service;
+//    public NoteController(NoteService service) {
+//        this.noteService = service;
 //    }
     
     @RequestMapping(value = "/api/note", method = RequestMethod.GET)
     @ResponseBody
     public List<NoteDTO> findAll() {
-        List<Note> models = service.findAll();
+        List<Note> models = noteService.findAll();
         return createDTOs(models);
     }
     

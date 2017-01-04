@@ -4,19 +4,26 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.hrkac.tweetnotebook.dao.NoteDao;
 import net.hrkac.tweetnotebook.dto.NoteDTO;
 import net.hrkac.tweetnotebook.model.Note;
-import net.hrkac.tweetnotebook.repository.NoteRepository;
 
 @Service
-public class RepositoryTodoService implements NoteService {
+public class NoteServiceImpl implements NoteService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryTodoService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoteServiceImpl.class);
 
-    private NoteRepository repository;
+    private NoteDao noteDao;
+    
+    @Autowired
+    public NoteServiceImpl(NoteDao noteDao) {
+        this.noteDao = noteDao;
+    }
+
 
     @Transactional
     @Override
@@ -27,14 +34,14 @@ public class RepositoryTodoService implements NoteService {
                 .description(added.getText())
                 .build();
 
-        return repository.save(model);
+        return noteDao.save(model);
     }
     
     @Transactional(readOnly = true)
     @Override
     public List<Note> findAll() {
         LOGGER.debug("Finding all");
-        return repository.findAll();
+        return noteDao.findAll();
     }
 
 }

@@ -18,7 +18,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "net.hrkac.tweetnotebook.repository")
+@EnableJpaRepositories(basePackages = "net.hrkac.tweetnotebook.dao")
 public class PersistenceContext {
 
     protected static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
