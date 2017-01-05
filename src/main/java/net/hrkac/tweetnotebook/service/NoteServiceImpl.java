@@ -44,4 +44,11 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.findAll();
     }
 
+
+    @Override
+    public Note update(NoteDTO dto) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

@@ -3,10 +3,13 @@ package net.hrkac.tweetnotebook.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,9 +31,9 @@ public class NoteController {
 //        this.noteService = service;
 //    }
     
-    @RequestMapping(value  = "/api/todo", method = RequestMethod.POST)
+    @RequestMapping(value  = "/api/note", method = RequestMethod.POST)
     @ResponseBody
-    public NoteDTO add(NoteDTO dto) {
+    public NoteDTO add(@Valid @RequestBody NoteDTO dto) {
         LOGGER.debug("Adding a new note {}", dto);
         Note added = noteService.add(dto);
         LOGGER.debug("Added a new note {}", added);
@@ -42,6 +45,11 @@ public class NoteController {
     public List<NoteDTO> findAll() {
         List<Note> models = noteService.findAll();
         return createDTOs(models);
+    }
+    
+    public NoteDTO update(NoteDTO dto, Long id) {
+        Note updated = noteService.update(dto);
+        return createDTO(updated);
     }
     
     private List<NoteDTO> createDTOs(List<Note> models) {

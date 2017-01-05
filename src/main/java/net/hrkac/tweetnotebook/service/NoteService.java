@@ -11,4 +11,6 @@ public interface NoteService {
 
     public List<Note> findAll();
 
+    public Note update(NoteDTO dto);
+
 }
