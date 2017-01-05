@@ -3,6 +3,8 @@ package net.hrkac.tweetnotebook.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import net.hrkac.tweetnotebook.service.NoteService;
 @Controller
 public class NoteController {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoteController.class);
+    
     @Autowired
     private NoteService noteService;
     
@@ -23,6 +27,15 @@ public class NoteController {
 //    public NoteController(NoteService service) {
 //        this.noteService = service;
 //    }
+    
+    @RequestMapping(value  = "/api/todo", method = RequestMethod.POST)
+    @ResponseBody
+    public NoteDTO add(NoteDTO dto) {
+        LOGGER.debug("Adding a new note {}", dto);
+        Note added = noteService.add(dto);
+        LOGGER.debug("Added a new note {}", added);
+        return createDTO(added);
+    }
     
     @RequestMapping(value = "/api/note", method = RequestMethod.GET)
     @ResponseBody
