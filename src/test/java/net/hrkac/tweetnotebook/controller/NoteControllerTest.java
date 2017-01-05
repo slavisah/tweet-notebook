@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,8 +29,9 @@ import org.springframework.web.context.WebApplicationContext;
 import net.hrkac.tweetnotebook.TestUtil;
 import net.hrkac.tweetnotebook.config.TestContext;
 import net.hrkac.tweetnotebook.config.WebAppContext;
+import net.hrkac.tweetnotebook.dto.NoteDTO;
 import net.hrkac.tweetnotebook.model.Note;
-import net.hrkac.tweetnotebook.model.NoteBuilder;
+import net.hrkac.tweetnotebook.model.TestNoteBuilder;
 import net.hrkac.tweetnotebook.service.NoteService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,9 +55,36 @@ public class NoteControllerTest {
     }
     
     @Test
+    public void add_EmptyNote_ShouldReturnValidationErrorForTitle() throws Exception {
+        NoteDTO dto = NoteDTO.getBuilder().build();
+        
+        mockMvc.perform(post("/api/note")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(dto))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+                .andExpect(jsonPath("$.fieldErrors[0].path", is("title")))
+                .andExpect(jsonPath("$.fieldErrors[0].message", is("The title cannot be empty.")));
+    }
+    
+    @Test
+    public void add_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText() {
+        String title = TestUtil.createStringWithLength(Note.MAX_LENGTH_TITLE + 1);
+        String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
+        
+    }
+    
+    @Test
+    public void add_NewNote_ShouldAddNoteAndReturnAddedEntry() {
+        
+    }
+    
+    @Test
     public void findAll_NotesFound_ShouldReturnFoundNoteEntries() throws Exception {
-        Note first = new NoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
-        Note second = new NoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
+        Note first = new TestNoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
+        Note second = new TestNoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
 
         when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
 

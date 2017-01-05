@@ -17,8 +17,14 @@ public class NoteDTO {
     @Length(max = Note.MAX_LENGTH_TITLE)
     private String title;
 
-    public NoteDTO() {
-
+    public NoteDTO(Builder builder) {
+        this.id = builder.id;
+        this.title = builder.title;
+        this.text = builder.text;
+    }
+    
+    public static Builder getBuilder() {
+        return new Builder();
     }
 
     public Long getId() {
@@ -43,6 +49,35 @@ public class NoteDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public static class Builder {
+
+        private Long id;
+        private String title;
+        private String text;
+
+        public Builder() {
+        }
+
+        public NoteDTO build() {
+            return new NoteDTO(this);
+        }
+        
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+        
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder text(String text) {
+            this.text = text;
+            return this;
+        }
     }
 
     @Override

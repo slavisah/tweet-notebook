@@ -63,13 +63,7 @@ public class NoteController {
     }
 
     private NoteDTO createDTO(Note model) {
-        NoteDTO dto = new NoteDTO();
-
-        dto.setId(model.getId());
-        dto.setText(model.getText());
-        dto.setTitle(model.getTitle());
-
-        return dto;
+        return NoteDTO.getBuilder().id(model.getId()).title(model.getTitle()).text(model.getText()).build();
     }
     
 }

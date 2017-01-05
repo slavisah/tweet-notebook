@@ -19,7 +19,7 @@ import org.joda.time.DateTime;
 public class Note {
 
     public static final int MAX_LENGTH_TEXT = 140;
-    public static final int MAX_LENGTH_TITLE = 100;
+    public static final int MAX_LENGTH_TITLE = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -91,8 +91,8 @@ public class Note {
         modifiedOn = DateTime.now();
     }
 
-    public void update(String description, String title) {
-        this.text = description;
+    public void update(String text, String title) {
+        this.text = text;
         this.title = title;
     }
 
@@ -109,7 +109,7 @@ public class Note {
             return new Note(this);
         }
 
-        public Builder description(String text) {
+        public Builder text(String text) {
             this.text = text;
             return this;
         }

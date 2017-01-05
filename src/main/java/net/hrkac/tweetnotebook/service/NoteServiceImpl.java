@@ -31,7 +31,7 @@ public class NoteServiceImpl implements NoteService {
         LOGGER.debug("Adding: {}", added);
 
         Note model = Note.getBuilder(added.getTitle())
-                .description(added.getText())
+                .text(added.getText())
                 .build();
 
         return noteDao.save(model);
