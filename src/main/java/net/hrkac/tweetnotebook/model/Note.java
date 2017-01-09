@@ -42,7 +42,7 @@ public class Note {
     @Version
     private long version;
     
-    public Note() {
+    protected Note() {
         
     }
 

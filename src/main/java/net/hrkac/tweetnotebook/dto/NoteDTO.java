@@ -16,13 +16,15 @@ public class NoteDTO {
     @NotEmpty
     @Length(max = Note.MAX_LENGTH_TITLE)
     private String title;
+    
+    protected NoteDTO() {}
 
     public NoteDTO(Builder builder) {
         this.id = builder.id;
         this.title = builder.title;
         this.text = builder.text;
     }
-    
+
     public static Builder getBuilder() {
         return new Builder();
     }
@@ -31,26 +33,14 @@ public class NoteDTO {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
     public static class Builder {
 
         private Long id;
