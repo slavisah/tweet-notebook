@@ -1,6 +1,7 @@
 package net.hrkac.tweetnotebook.controller;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Matchers.any;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -109,6 +111,15 @@ public class NoteControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("title")))
                 .andExpect(jsonPath("$.text", is("text")));
+        // Assert - Mockito
+        ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
+        verify(noteServiceMock, times(1)).add(dtoCaptor.capture());
+        verifyNoMoreInteractions(noteServiceMock);
+        // Assert - Mockito
+        NoteDTO dtoArgument = dtoCaptor.getValue();
+        assertNull(dtoArgument.getId());
+        assertThat(dtoArgument.getTitle(), is("title"));
+        assertThat(dtoArgument.getText(), is("text"));
     }
     
     @Test
