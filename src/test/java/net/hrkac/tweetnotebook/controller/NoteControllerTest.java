@@ -26,7 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -67,7 +66,7 @@ public class NoteControllerTest {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
-        // Assert
+        // Assert - Spring MVC test support
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -83,12 +82,13 @@ public class NoteControllerTest {
         NoteDTO dto = NoteDTO.getBuilder().title(title).text(text).build();
         // Act
         mockMvc.perform(post("/api/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
-        // Assert
+        // Assert - Spring MVC test support
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
             .andExpect(jsonPath("$.fieldErrors[*].path", containsInAnyOrder("title", "text")))
             .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("The maximum length of the text is 140 characters.", "The maximum length of the title is 50 characters.")));
+        // Assert - Mockito
         verifyZeroInteractions(noteServiceMock);
     }
     
@@ -103,7 +103,7 @@ public class NoteControllerTest {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
-        // Assert
+        // Assert - Spring MVC test support
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
@@ -119,7 +119,7 @@ public class NoteControllerTest {
         when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
         // Act
         mockMvc.perform(get("/api/note"))
-        // Assert
+        // Assert - Spring MVC test support
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -129,7 +129,7 @@ public class NoteControllerTest {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].title", is("Example 2")))
                 .andExpect(jsonPath("$[1].text", is("Lorem ipsum")));
-
+        // Assert - Mockito
         verify(noteServiceMock, times(1)).findAll();
         verifyNoMoreInteractions(noteServiceMock);
     }
