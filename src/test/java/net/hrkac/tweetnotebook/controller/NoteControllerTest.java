@@ -64,7 +64,7 @@ public class NoteControllerTest {
         // Arrange
         NoteDTO dto = NoteDTO.getBuilder().build();
         // Act
-        mockMvc.perform(post("/api/note")
+        mockMvc.perform(post("/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
@@ -83,7 +83,7 @@ public class NoteControllerTest {
         String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
         NoteDTO dto = NoteDTO.getBuilder().title(title).text(text).build();
         // Act
-        mockMvc.perform(post("/api/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
+        mockMvc.perform(post("/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
         // Assert - Spring MVC test support
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
@@ -101,7 +101,7 @@ public class NoteControllerTest {
         Note added = new TestNoteBuilder().id(1L).title("title").text("text").build();
         when(noteServiceMock.add(any(NoteDTO.class))).thenReturn(added);
         // Act
-        mockMvc.perform(post("/api/note")
+        mockMvc.perform(post("/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
@@ -129,7 +129,7 @@ public class NoteControllerTest {
         Note second = new TestNoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
         when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
         // Act
-        mockMvc.perform(get("/api/note"))
+        mockMvc.perform(get("/note"))
         // Assert - Spring MVC test support
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))

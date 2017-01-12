@@ -21,10 +21,13 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
     private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-//    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+    }
 //
 //    @Override
 //    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -52,15 +55,15 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
 
         return exceptionResolver;
     }
-//
-//    @Bean
-//    public ViewResolver viewResolver() {
-//        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//
-//        viewResolver.setViewClass(JstlView.class);
-//        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
-//        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
-//
-//        return viewResolver;
-//    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
+        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
+
+        return viewResolver;
+    }
 }

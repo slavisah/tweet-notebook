@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.hrkac.tweetnotebook.dao.NoteDao;
 import net.hrkac.tweetnotebook.dto.NoteDTO;
+import net.hrkac.tweetnotebook.exception.NoteNotFoundException;
 import net.hrkac.tweetnotebook.model.Note;
 
 @Service
@@ -24,11 +25,10 @@ public class NoteServiceImpl implements NoteService {
         this.noteDao = noteDao;
     }
 
-
-    @Transactional
     @Override
+    @Transactional
     public Note add(NoteDTO added) {
-        LOGGER.debug("Adding: {}", added);
+        LOGGER.debug("Adding a note: {}", added);
 
         Note model = Note.getBuilder(added.getTitle())
                 .text(added.getText())
@@ -36,19 +36,48 @@ public class NoteServiceImpl implements NoteService {
 
         return noteDao.save(model);
     }
-    
-    @Transactional(readOnly = true)
+
     @Override
+    @Transactional(readOnly = true)
     public List<Note> findAll() {
-        LOGGER.debug("Finding all");
+        LOGGER.debug("Finding all notes");
         return noteDao.findAll();
     }
-
-
+    
     @Override
-    public Note update(NoteDTO dto) {
-        // TODO Auto-generated method stub
-        return null;
+    @Transactional(readOnly = true, rollbackFor = {NoteNotFoundException.class})
+    public Note findById(Long id) throws NoteNotFoundException {
+        LOGGER.debug("Finding a note with id: {}", id);
+
+        Note found = noteDao.findOne(id);
+        LOGGER.debug("Found note: {}", found);
+
+        if (found == null) {
+            throw new NoteNotFoundException("No entry found with id: " + id);
+        }
+
+        return found;
     }
 
+    @Override
+    @Transactional(rollbackFor = {NoteNotFoundException.class})
+    public Note update(NoteDTO updated) throws NoteNotFoundException {
+        LOGGER.debug("Updating note with information: {}", updated);
+
+        Note model = findById(updated.getId());
+        model.update(updated.getText(), updated.getTitle());
+
+        return model;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {NoteNotFoundException.class})
+    public Note deleteById(Long id) throws NoteNotFoundException {
+        
+        Note deleted = findById(id);
+        LOGGER.debug("Deleting note: {}", deleted);
+        noteDao.delete(deleted);
+        
+        return deleted;
+    }
 }
