@@ -115,7 +115,7 @@ public class NoteControllerTest {
         ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
         verify(noteServiceMock, times(1)).add(dtoCaptor.capture());
         verifyNoMoreInteractions(noteServiceMock);
-        // Assert - Mockito
+        // Assert
         NoteDTO dtoArgument = dtoCaptor.getValue();
         assertNull(dtoArgument.getId());
         assertThat(dtoArgument.getTitle(), is("title"));
