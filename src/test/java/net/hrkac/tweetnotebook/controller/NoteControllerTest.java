@@ -61,14 +61,12 @@ public class NoteControllerTest {
     
     @Test
     public void add_EmptyNote_ShouldReturnValidationErrorForTitle() throws Exception {
-        // Arrange
         NoteDTO dto = NoteDTO.getBuilder().build();
-        // Act
+
         mockMvc.perform(post("/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
-        // Assert - Spring MVC test support
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
@@ -78,44 +76,40 @@ public class NoteControllerTest {
     
     @Test
     public void add_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText() throws Exception {
-        // Arrange
         String title = TestUtil.createStringWithLength(Note.MAX_LENGTH_TITLE + 1);
         String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
         NoteDTO dto = NoteDTO.getBuilder().title(title).text(text).build();
-        // Act
+
         mockMvc.perform(post("/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
-        // Assert - Spring MVC test support
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
             .andExpect(jsonPath("$.fieldErrors[*].path", containsInAnyOrder("title", "text")))
             .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("The maximum length of the text is 140 characters.", "The maximum length of the title is 50 characters.")));
-        // Assert - Mockito
+        
         verifyZeroInteractions(noteServiceMock);
     }
     
     @Test
     public void add_NewNote_ShouldAddNoteAndReturnAddedEntry() throws Exception {
-        // Arrange
         NoteDTO dto = NoteDTO.getBuilder().title("title").text("text").build();
         Note added = new TestNoteBuilder().id(1L).title("title").text("text").build();
         when(noteServiceMock.add(any(NoteDTO.class))).thenReturn(added);
-        // Act
+
         mockMvc.perform(post("/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
-        // Assert - Spring MVC test support
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("title")))
                 .andExpect(jsonPath("$.text", is("text")));
-        // Assert - Mockito
+
         ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
         verify(noteServiceMock, times(1)).add(dtoCaptor.capture());
         verifyNoMoreInteractions(noteServiceMock);
-        // Assert
+
         NoteDTO dtoArgument = dtoCaptor.getValue();
         assertNull(dtoArgument.getId());
         assertThat(dtoArgument.getTitle(), is("title"));
@@ -124,13 +118,11 @@ public class NoteControllerTest {
     
     @Test
     public void findAll_NotesFound_ShouldReturnFoundNoteEntries() throws Exception {
-        // Arrange
         Note first = new TestNoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
         Note second = new TestNoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
         when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
-        // Act
+
         mockMvc.perform(get("/note"))
-        // Assert - Spring MVC test support
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -140,7 +132,7 @@ public class NoteControllerTest {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].title", is("Example 2")))
                 .andExpect(jsonPath("$[1].text", is("Lorem ipsum")));
-        // Assert - Mockito
+
         verify(noteServiceMock, times(1)).findAll();
         verifyNoMoreInteractions(noteServiceMock);
     }
