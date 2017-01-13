@@ -1,4 +1,4 @@
-package net.hrkac.tweetnotebook.service;
+package net.hrkac.tweetnotebook.service.impl;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import net.hrkac.tweetnotebook.dao.NoteDao;
 import net.hrkac.tweetnotebook.dto.NoteDTO;
 import net.hrkac.tweetnotebook.exception.NoteNotFoundException;
 import net.hrkac.tweetnotebook.model.Note;
+import net.hrkac.tweetnotebook.service.NoteService;
 
 @Service
 public class NoteServiceImpl implements NoteService {
