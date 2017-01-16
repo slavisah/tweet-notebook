@@ -31,8 +31,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import net.hrkac.tweetnotebook.TestUtil;
 import net.hrkac.tweetnotebook.config.TestContext;
+import net.hrkac.tweetnotebook.config.TestUtil;
 import net.hrkac.tweetnotebook.config.WebAppContext;
 import net.hrkac.tweetnotebook.dto.NoteDTO;
 import net.hrkac.tweetnotebook.model.Note;
