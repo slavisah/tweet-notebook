@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -42,6 +43,7 @@ import net.hrkac.tweetnotebook.config.TestUtil;
         DbUnitTestExecutionListener.class })
 @DatabaseSetup("note-data.xml")
 @ActiveProfiles("dev")
+@TestPropertySource("classpath:application-dev.properties")
 public class NoteControllerIT {
     
     @Resource
