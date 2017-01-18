@@ -48,6 +48,8 @@ public class NoteController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<NoteDTO> findAll() {
+        LOGGER.debug("Finding all notes");
+        
         List<Note> models = noteService.findAll();
         return createDTOs(models);
     }

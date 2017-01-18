@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,7 +40,7 @@ import net.hrkac.tweetnotebook.model.TestNoteBuilder;
 import net.hrkac.tweetnotebook.service.NoteService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestContext.class, WebAppContext.class})
+@SpringApplicationConfiguration(classes = {TestContext.class, WebAppContext.class})
 @WebAppConfiguration
 public class NoteControllerTest {
     
