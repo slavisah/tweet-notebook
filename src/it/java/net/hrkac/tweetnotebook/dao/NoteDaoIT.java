@@ -3,9 +3,6 @@ package net.hrkac.tweetnotebook.dao;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-import javax.persistence.PersistenceContext;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,20 +14,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 
+import net.hrkac.tweetnotebook.config.ExampleApplicationContext;
 import net.hrkac.tweetnotebook.model.Note;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {PersistenceContext.class})
+@SpringApplicationConfiguration(classes = {ExampleApplicationContext.class})
+@WebAppConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
-@DatabaseSetup("note-data.xml")
+@DatabaseSetup("noteData.xml")
 @ActiveProfiles("it")
 public class NoteDaoIT {
     
@@ -38,7 +38,7 @@ public class NoteDaoIT {
     private NoteDao noteDao;
 
     @Test
-    @ExpectedDatabase("note-data.xml")
+    @ExpectedDatabase("noteData.xml")
     public void findById_NoteFound_ShouldReturnOneNoteWithId() {
         Note found = noteDao.findOne(1L);
         assertNotNull(found);

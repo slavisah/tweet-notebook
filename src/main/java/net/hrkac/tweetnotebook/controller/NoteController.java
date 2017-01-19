@@ -21,7 +21,7 @@ import net.hrkac.tweetnotebook.model.Note;
 import net.hrkac.tweetnotebook.service.NoteService;
 
 @Controller
-@RequestMapping("/note")
+@RequestMapping("/api")
 public class NoteController {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(NoteController.class);
@@ -34,52 +34,43 @@ public class NoteController {
 //        this.noteService = service;
 //    }
     
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/note", method = RequestMethod.POST)
     @ResponseBody
     public NoteDTO add(@Valid @RequestBody NoteDTO dto) {
-        LOGGER.debug("Adding a new note {}", dto);
-        
+        LOGGER.debug("REST request to save Note : {}", dto);
         Note added = noteService.add(dto);
-        LOGGER.debug("Added a new note {}", added);
-        
         return createDTO(added);
     }
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/note", method = RequestMethod.GET)
     @ResponseBody
     public List<NoteDTO> findAll() {
-        LOGGER.debug("Finding all notes");
-        
+        LOGGER.debug("REST request to get a list of all Notes");
         List<Note> models = noteService.findAll();
         return createDTOs(models);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.GET)
     @ResponseBody
     public NoteDTO findById(@PathVariable("id") Long id) throws NoteNotFoundException {
-        LOGGER.debug("Finding note with id: {}", id);
-
+        LOGGER.debug("REST request to get Note with id: {}", id);
         Note found = noteService.findById(id);
-        LOGGER.debug("Found note with information: {}", found);
-
         return createDTO(found);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public NoteDTO update(@Valid @RequestBody NoteDTO dto, @PathVariable("id") Long id) throws NoteNotFoundException {
+        LOGGER.debug("REST request to update Note : {}", dto);
         Note updated = noteService.update(dto);
         return createDTO(updated);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public NoteDTO deleteById(@PathVariable("id") Long id) throws NoteNotFoundException {
-        LOGGER.debug("Deleting a note with id: {}", id);
-
+        LOGGER.debug("REST request to delete Note with id: {}", id);
         Note deleted = noteService.deleteById(id);
-        LOGGER.debug("Deleted note with information: {}", deleted);
-
         return createDTO(deleted);
     }
     

@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Type;
@@ -38,9 +37,6 @@ public class Note {
 
     @Column(name = "title", nullable = false, length = MAX_LENGTH_TITLE)
     private String title;
-
-    @Version
-    private long version;
     
     protected Note() {
         
@@ -73,10 +69,6 @@ public class Note {
 
     public String getTitle() {
         return title;
-    }
-
-    public long getVersion() {
-        return version;
     }
 
     @PrePersist

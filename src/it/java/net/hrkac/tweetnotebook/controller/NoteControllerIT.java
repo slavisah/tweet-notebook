@@ -38,7 +38,7 @@ import net.hrkac.tweetnotebook.config.TestUtil;
         DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
-@DatabaseSetup("note-data.xml")
+@DatabaseSetup("noteData.xml")
 @ActiveProfiles("it")
 public class NoteControllerIT {
     
@@ -53,9 +53,9 @@ public class NoteControllerIT {
     }
 
     @Test
-    @ExpectedDatabase("note-data.xml")
+    @ExpectedDatabase("noteData.xml")
     public void findAll_NotesFound_ShouldReturnFoundNoteEntries() throws Exception {
-        mockMvc.perform(get("/note"))
+        mockMvc.perform(get("/api/note"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
