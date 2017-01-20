@@ -63,7 +63,7 @@ public class NoteControllerTest {
     public void add_EmptyNote_ShouldReturnValidationErrorForTitle() throws Exception {
         NoteDTO dto = NoteDTO.getBuilder().build();
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(post("/api/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
@@ -80,7 +80,7 @@ public class NoteControllerTest {
         String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
         NoteDTO dto = NoteDTO.getBuilder().title(title).text(text).build();
 
-        mockMvc.perform(post("/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
+        mockMvc.perform(post("/api/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
@@ -96,7 +96,7 @@ public class NoteControllerTest {
         Note added = new TestNoteBuilder().id(1L).title("title").text("text").build();
         when(noteServiceMock.add(any(NoteDTO.class))).thenReturn(added);
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(post("/api/note")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dto))
         )
@@ -122,7 +122,7 @@ public class NoteControllerTest {
         Note second = new TestNoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
         when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
 
-        mockMvc.perform(get("/note"))
+        mockMvc.perform(get("/api/note"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))

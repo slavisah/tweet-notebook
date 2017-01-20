@@ -2,20 +2,77 @@ package net.hrkac.tweetnotebook.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import net.hrkac.tweetnotebook.dao.NoteDao;
 import net.hrkac.tweetnotebook.dto.NoteDTO;
 import net.hrkac.tweetnotebook.exception.NoteNotFoundException;
 import net.hrkac.tweetnotebook.model.Note;
 
-public interface NoteService {
+@Service
+public class NoteService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoteService.class);
+
+    private NoteDao noteDao;
     
-    public Note add(NoteDTO added);
+    @Autowired
+    public NoteService(NoteDao noteDao) {
+        this.noteDao = noteDao;
+    }
 
-    public List<Note> findAll();
+    @Transactional
+    public Note add(NoteDTO added) {
+        LOGGER.debug("Adding a note: {}", added);
+
+        Note model = Note.getBuilder(added.getTitle())
+                .text(added.getText())
+                .build();
+
+        return noteDao.save(model);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Note> findAll() {
+        LOGGER.debug("Finding all notes");
+        return noteDao.findAll();
+    }
     
-    public Note findById(Long id) throws NoteNotFoundException;
+    @Transactional(readOnly = true, rollbackFor = {NoteNotFoundException.class})
+    public Note findById(Long id) throws NoteNotFoundException {
+        LOGGER.debug("Finding a note with id: {}", id);
 
-    public Note update(NoteDTO dto) throws NoteNotFoundException;
+        Note found = noteDao.findOne(id);
+        LOGGER.debug("Found note: {}", found);
 
-    public Note deleteById(Long id) throws NoteNotFoundException;
+        if (found == null) {
+            throw new NoteNotFoundException("No entry found with id: " + id);
+        }
 
+        return found;
+    }
+
+    @Transactional(rollbackFor = {NoteNotFoundException.class})
+    public Note update(NoteDTO updated) throws NoteNotFoundException {
+        LOGGER.debug("Updating note with information: {}", updated);
+
+        Note model = findById(updated.getId());
+        model.update(updated.getText(), updated.getTitle());
+
+        return model;
+    }
+
+    @Transactional(rollbackFor = {NoteNotFoundException.class})
+    public Note deleteById(Long id) throws NoteNotFoundException {
+        
+        Note deleted = findById(id);
+        LOGGER.debug("Deleting note: {}", deleted);
+        noteDao.delete(deleted);
+        
+        return deleted;
+    }
 }
