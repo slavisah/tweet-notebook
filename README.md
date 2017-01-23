@@ -2,11 +2,8 @@ Simple project for education
 ============================
 
 - Start application
-```
-mvn spring-boot:run -Dspring.profiles.active=dev
-mvnw spring-boot:run -Dspring.profiles.active=dev
-./mvnw spring-boot:run -Dspring.profiles.active=dev
-```
+   Without Maven Wrapper ```mvn spring-boot:run -Dspring.profiles.active=dev```
+   Using Maven Wrapper ```./mvnw spring-boot:run -Dspring.profiles.active=dev```
 - Stop application
 ```
 curl -X POST localhost:8080/shutdown
@@ -16,6 +13,6 @@ curl -X POST localhost:8080/shutdown
 http://localhost:8080/swagger-ui.html
 ```
 - Run tests
--- Unit tests: ```mvn test -P dev```
--- Integration tests: ```mvn verify -P it```
+   Unit tests: ```mvn test -P dev```
+   Integration tests: ```mvn verify -P it```
 
