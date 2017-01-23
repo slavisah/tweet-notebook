@@ -1,13 +1,14 @@
 package net.hrkac.tweetnotebook.dao;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
-
-import net.hrkac.tweetnotebook.config.TweetNotebookApplicationContext;
-import net.hrkac.tweetnotebook.model.Note;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+
+import net.hrkac.tweetnotebook.config.TweetNotebookApplicationContext;
+import net.hrkac.tweetnotebook.model.Note;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {TweetNotebookApplicationContext.class})
@@ -41,14 +44,13 @@ public class NoteDaoIT {
     private NoteDao noteDao;
     
     @Test
-    @ExpectedDatabase(value = "noteData-add-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void add_NewNote_ShouldAddNoteAndReturnAddedEntry() {
+    public void add_NewNote_ShouldAddNoteAndGenerateId() {
         Note model = Note.getBuilder("Example 3").text("Lorem ipsum").build();
         noteDao.save(model);
+        assertThat(model.getId(), is(notNullValue()));
     }
 
     @Test
-    @ExpectedDatabase("noteData.xml")
     public void findOne_NoteFound_ShouldReturnOneNoteWithId() {
         Note found = noteDao.findOne(1L);
         assertNotNull(found);
@@ -57,11 +59,18 @@ public class NoteDaoIT {
     }
     
     @Test
-    @ExpectedDatabase(value = "noteData-update-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    public void findAll_NotesFound_ShouldReturnListOfNotes() {
+        List<Note> notes = noteDao.findAll();
+        assertThat(notes, hasSize(greaterThan(0)));
+    }
+    
+    @Test
     public void update_NoteFound_ShouldUpdateNoteEntry() {
         Note model = noteDao.findOne(1L);
         model.update("Text", "Title");
         noteDao.saveAndFlush(model);
+        assertThat(model.getTitle(), is("Title"));
+        assertThat(model.getText(), is("Text"));
     }
     
     @Test
@@ -72,8 +81,7 @@ public class NoteDaoIT {
     }
     
     @Test
-    @ExpectedDatabase("noteData.xml")
-    public void findByTitle_ListOfNotesFound_ShouldReturnListOfNotesWithTitle() {
+    public void findByTitle_NotesFound_ShouldReturnListOfNotesWithTitle() {
         List<Note> list = noteDao.findByTitle("Example 1");
         assertNotNull(list);
         assertThat(list, hasSize(greaterThan(0)));
