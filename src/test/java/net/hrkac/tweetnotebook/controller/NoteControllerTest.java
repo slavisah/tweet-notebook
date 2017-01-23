@@ -60,216 +60,30 @@ public class NoteControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
     
-    @Test
-    public void add_EmptyNote_ShouldReturnValidationErrorForTitle() throws Exception {
-        NoteDTO dto = NoteDTO.getBuilder().build();
-
-        mockMvc.perform(post("/api/note")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
-                .andExpect(jsonPath("$.fieldErrors[0].path", is("title")))
-                .andExpect(jsonPath("$.fieldErrors[0].message", is("The title cannot be empty.")));
-    }
+    // TODO 18 add_EmptyNote_ShouldReturnValidationErrorForTitle
     
-    @Test
-    public void add_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText() throws Exception {
-        String title = TestUtil.createStringWithLength(Note.MAX_LENGTH_TITLE + 1);
-        String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
-        NoteDTO dto = NoteDTO.getBuilder().title(title).text(text).build();
-
-        mockMvc.perform(post("/api/note").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-            .andExpect(jsonPath("$.fieldErrors[*].path", containsInAnyOrder("title", "text")))
-            .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("The maximum length of the text is 140 characters.", "The maximum length of the title is 50 characters.")));
-        
-        verifyZeroInteractions(noteServiceMock);
-    }
+    // TODO 19 add_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText
     
-    @Test
-    public void add_NewNote_ShouldAddNoteAndReturnAddedEntry() throws Exception {
-        NoteDTO dto = NoteDTO.getBuilder().title("title").text("text").build();
-        Note added = new TestNoteBuilder().id(1L).title("title").text("text").build();
-        when(noteServiceMock.add(any(NoteDTO.class))).thenReturn(added);
-
-        mockMvc.perform(post("/api/note")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("title")))
-                .andExpect(jsonPath("$.text", is("text")));
-
-        ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
-        verify(noteServiceMock, times(1)).add(dtoCaptor.capture());
-        verifyNoMoreInteractions(noteServiceMock);
-
-        NoteDTO dtoArgument = dtoCaptor.getValue();
-        assertNull(dtoArgument.getId());
-        assertThat(dtoArgument.getTitle(), is("title"));
-        assertThat(dtoArgument.getText(), is("text"));
-    }
+    // TODO 20 add_NewNote_ShouldAddNoteAndReturnAddedEntry
     
     @Test
     public void findAll_NotesFound_ShouldReturnFoundNoteEntries() throws Exception {
-        Note first = new TestNoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
-        Note second = new TestNoteBuilder().id(2L).title("Example 2").text("Lorem ipsum").build();
-        when(noteServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
-
-        mockMvc.perform(get("/api/note"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].title", is("Example 1")))
-                .andExpect(jsonPath("$[0].text", is("Lorem ipsum")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].title", is("Example 2")))
-                .andExpect(jsonPath("$[1].text", is("Lorem ipsum")));
-
-        verify(noteServiceMock, times(1)).findAll();
-        verifyNoMoreInteractions(noteServiceMock);
+        // TODO 05 findAll_NotesFound_ShouldReturnFoundNoteEntries
+        fail("Not yet implemented");
     }
     
-    @Test
-    public void findById_NoteFound_ShouldReturnFoundEntry() throws Exception {
-        Note found = new TestNoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
+    // TODO 21 findById_NoteFound_ShouldReturnFoundEntry
 
-        when(noteServiceMock.findById(1L)).thenReturn(found);
-
-        mockMvc.perform(get("/api/note/{id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Example 1")))
-                .andExpect(jsonPath("$.text", is("Lorem ipsum")));
-
-        verify(noteServiceMock, times(1)).findById(1L);
-        verifyNoMoreInteractions(noteServiceMock);
-    }
-
-    @Test
-    public void findById_NoteNotFound_ShouldReturnHttpStatusCode404() throws Exception {
-        when(noteServiceMock.findById(1L)).thenThrow(new NoteNotFoundException(""));
-
-        mockMvc.perform(get("/api/note/{id}", 1L))
-                .andExpect(status().isNotFound());
-
-        verify(noteServiceMock, times(1)).findById(1L);
-        verifyNoMoreInteractions(noteServiceMock);
-    }
+    // TODO 22 findById_NoteNotFound_ShouldReturnHttpStatusCode404
     
-    @Test
-    public void update_EmptyNote_ShouldReturnValidationErrorForTitle() throws Exception {
-        NoteDTO dto = NoteDTO.getBuilder().id(1L).build();
+    // TODO 23 update_EmptyNote_ShouldReturnValidationErrorForTitle
 
-        mockMvc.perform(put("/api/note/{id}", 1L)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
-                .andExpect(jsonPath("$.fieldErrors[0].path", is("title")))
-                .andExpect(jsonPath("$.fieldErrors[0].message", is("The title cannot be empty.")));
-        // because of the validation errors it never gets to point of interaction with service method update() 
-        verifyZeroInteractions(noteServiceMock);
-    }
+    // TODO 24 update_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText
 
-    @Test
-    public void update_TitleAndTextAreTooLong_ShouldReturnValidationErrorsForTitleAndText() throws Exception {
-        String title = TestUtil.createStringWithLength(Note.MAX_LENGTH_TITLE + 1);
-        String text = TestUtil.createStringWithLength(Note.MAX_LENGTH_TEXT + 1);
+    // TODO 25 update_NoteNotFound_ShouldReturnHttpStatusCode404
 
-        NoteDTO dto = NoteDTO.getBuilder().id(1L).title(title).text(text).build();
-
-        mockMvc.perform(put("/api/note/{id}", 1L)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-                .andExpect(jsonPath("$.fieldErrors[*].path", containsInAnyOrder("title", "text")))
-                .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
-                        "The maximum length of the text is 140 characters.",
-                        "The maximum length of the title is 50 characters."
-                )));
-        // because of the validation errors it never gets to point of interaction with service method update()
-        verifyZeroInteractions(noteServiceMock);
-    }
-
-    @Test
-    public void update_NoteNotFound_ShouldReturnHttpStatusCode404() throws Exception {
-        NoteDTO dto = NoteDTO.getBuilder().id(10L).title("title").text("text").build();
-
-        when(noteServiceMock.update(any(NoteDTO.class))).thenThrow(new NoteNotFoundException(""));
-
-        mockMvc.perform(put("/api/note/{id}", 10L)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isNotFound());
-
-        ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
-        verify(noteServiceMock, times(1)).update(dtoCaptor.capture());
-        verifyNoMoreInteractions(noteServiceMock);
-
-        NoteDTO dtoArgument = dtoCaptor.getValue();
-        assertThat(dtoArgument.getId(), is(10L));
-        assertThat(dtoArgument.getTitle(), is("title"));
-        assertThat(dtoArgument.getText(), is("text"));
-    }
-
-    @Test
-    public void update_NoteFound_ShouldUpdateNoteAndReturnIt() throws Exception {
-        NoteDTO dto = NoteDTO.getBuilder().id(1L).title("title").text("text").build();
-
-        Note updated = new TestNoteBuilder().id(1L).title("title").text("text").build();
-
-        when(noteServiceMock.update(any(NoteDTO.class))).thenReturn(updated);
-
-        mockMvc.perform(put("/api/note/{id}", 1L)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dto))
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("title")))
-                .andExpect(jsonPath("$.text", is("text")));
-
-        ArgumentCaptor<NoteDTO> dtoCaptor = ArgumentCaptor.forClass(NoteDTO.class);
-        verify(noteServiceMock, times(1)).update(dtoCaptor.capture());
-        verifyNoMoreInteractions(noteServiceMock);
-
-        NoteDTO dtoArgument = dtoCaptor.getValue();
-        assertThat(dtoArgument.getId(), is(1L));
-        assertThat(dtoArgument.getTitle(), is("title"));
-        assertThat(dtoArgument.getText(), is("text"));
-    }
+    // TODO 26 update_NoteFound_ShouldUpdateNoteAndReturnIt
     
-    @Test
-    public void deleteById_NoteFound_ShouldDeleteNoteAndReturnIt() throws Exception {
-        Note deleted = new TestNoteBuilder().id(1L).title("Example 1").text("Lorem ipsum").build();
-
-        when(noteServiceMock.deleteById(1L)).thenReturn(deleted);
-
-        mockMvc.perform(delete("/api/note/{id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Example 1")))
-                .andExpect(jsonPath("$.text", is("Lorem ipsum")));
-
-        verify(noteServiceMock, times(1)).deleteById(1L);
-        verifyNoMoreInteractions(noteServiceMock);
-    }
+    // TODO 27 deleteById_NoteFound_ShouldDeleteNoteAndReturnIt
+    
 }

@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -42,49 +43,21 @@ public class NoteDaoIT {
     
     @Autowired
     private NoteDao noteDao;
-    
-    @Test
-    public void add_NewNote_ShouldAddNoteAndGenerateId() {
-        Note model = Note.getBuilder("Example 3").text("Lorem ipsum").build();
-        noteDao.save(model);
-        assertThat(model.getId(), is(notNullValue()));
-    }
+ 
+    // TODO 07 add_NewNote_ShouldAddNoteAndGenerateId
 
-    @Test
-    public void findOne_NoteFound_ShouldReturnOneNoteWithId() {
-        Note found = noteDao.findOne(1L);
-        assertNotNull(found);
-        assertThat(found.getId(), equalTo(1L));
-        assertThat(found.getText(), equalTo("Lorem ipsum"));
-    }
+    // TODO 08 findOne_NoteFound_ShouldReturnOneNoteWithId
     
     @Test
     public void findAll_NotesFound_ShouldReturnListOfNotes() {
-        List<Note> notes = noteDao.findAll();
-        assertThat(notes, hasSize(greaterThan(0)));
+        // TODO 01 findAll_NotesFound_ShouldReturnListOfNotes
+        fail("Not yet implemented");
     }
     
-    @Test
-    public void update_NoteFound_ShouldUpdateNoteEntry() {
-        Note model = noteDao.findOne(1L);
-        model.update("Text", "Title");
-        noteDao.saveAndFlush(model);
-        assertThat(model.getTitle(), is("Title"));
-        assertThat(model.getText(), is("Text"));
-    }
+    // TODO 09 update_NoteFound_ShouldUpdateNoteEntry
     
-    @Test
-    @ExpectedDatabase("noteData-delete-expected.xml")
-    public void deleteById_NoteFound_ShouldDeleteNoteEntry() {
-        Note deleted = noteDao.findOne(1L);
-        noteDao.delete(deleted);
-    }
-    
-    @Test
-    public void findByTitle_NotesFound_ShouldReturnListOfNotesWithTitle() {
-        List<Note> list = noteDao.findByTitle("Example 1");
-        assertNotNull(list);
-        assertThat(list, hasSize(greaterThan(0)));
-    }
+    // TODO 10 deleteById_NoteFound_ShouldDeleteNoteEntry
+ 
+    // TODO 02 findByTitle_NotesFound_ShouldReturnListOfNotesWithTitle
 
 }

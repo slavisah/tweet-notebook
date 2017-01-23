@@ -2,6 +2,7 @@ package net.hrkac.tweetnotebook.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,61 +58,16 @@ public class NoteControllerIT {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
     
-    @Test
-    @ExpectedDatabase(value="noteData-add-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void add_NewNote_ShouldAddNoteAndReturnAddedEntry() throws Exception {
-        NoteDTO added = NoteDTO.getBuilder().title("Example 3").text("Lorem ipsum").build();
-
-        mockMvc.perform(post("/api/note")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(added))
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(3)))
-                .andExpect(jsonPath("$.title", is("Example 3")))
-                .andExpect(jsonPath("$.text", is("Lorem ipsum")));
-    }
+    // TODO 28 add_NewNote_ShouldAddNoteAndReturnAddedEntry
 
     @Test
-    @ExpectedDatabase("noteData.xml")
-    public void findAll_NotesFound_ShouldReturnFoundNoteEntries() throws Exception {
-        mockMvc.perform(get("/api/note"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].title", is("Example 1")))
-                .andExpect(jsonPath("$[0].text", is("Lorem ipsum")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].title", is("Example 2")))
-                .andExpect(jsonPath("$[1].text", is("Lorem ipsum")));
+    public void findAll_NotesFound_ShouldReturnFoundNoteEntries() {
+        // TODO 06 findAll_NotesFound_ShouldReturnFoundNoteEntries
+        fail("Not yet implemented");
     }
     
-    @Test
-    @ExpectedDatabase(value="noteData-update-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void update_NoteFound_ShouldUpdateNoteAndReturnIt() throws Exception {
-        NoteDTO updated = NoteDTO.getBuilder().id(1L).title("Title").text("Text").build();
-
-        mockMvc.perform(put("/api/note/{id}", 1L)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updated))
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Title")))
-                .andExpect(jsonPath("$.text", is("Text")));
-    }
+    // TODO 29 update_NoteFound_ShouldUpdateNoteAndReturnIt
     
-    @Test
-    @ExpectedDatabase("noteData-delete-expected.xml")
-    public void deleteById_NoteFound_ShouldDeleteNoteAndReturnIt() throws Exception {
-        mockMvc.perform(delete("/api/note/{id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Example 1")))
-                .andExpect(jsonPath("$.text", is("Lorem ipsum")));
-    }
+    // TODO 30 deleteById_NoteFound_ShouldDeleteNoteAndReturnIt
+    
 }
