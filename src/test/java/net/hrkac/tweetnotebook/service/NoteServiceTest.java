@@ -83,7 +83,7 @@ public class NoteServiceTest {
     }
 
     @Test(expected = NoteNotFoundException.class)
-    public void findById_TodoEntryNotFound_ShouldThrowException() throws NoteNotFoundException {
+    public void findById_NoteEntryNotFound_ShouldThrowException() throws NoteNotFoundException {
         when(noteDaoMock.findOne(ID)).thenReturn(null);
 
         noteService.findById(ID);
@@ -138,7 +138,7 @@ public class NoteServiceTest {
     }
 
     @Test(expected = NoteNotFoundException.class)
-    public void deleteById_TodoEntryNotFound_ShouldThrowException() throws NoteNotFoundException {
+    public void deleteById_NoteEntryNotFound_ShouldThrowException() throws NoteNotFoundException {
         when(noteDaoMock.findOne(ID)).thenReturn(null);
 
         noteService.deleteById(ID);
