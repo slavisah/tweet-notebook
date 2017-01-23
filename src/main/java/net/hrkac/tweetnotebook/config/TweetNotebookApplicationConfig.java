@@ -9,14 +9,14 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-public class ExampleApplicationConfig implements WebApplicationInitializer {
+public class TweetNotebookApplicationConfig implements WebApplicationInitializer {
     private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
     private static final String DISPATCHER_SERVLET_MAPPING = "/";
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(ExampleApplicationContext.class);
+        rootContext.register(TweetNotebookApplicationContext.class);
 
         //XmlWebApplicationContext rootContext = new XmlWebApplicationContext();
         //rootContext.setConfigLocation("classpath:exampleApplicationContext.xml");

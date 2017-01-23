@@ -1,9 +1,12 @@
 package net.hrkac.tweetnotebook.dao;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import net.hrkac.tweetnotebook.config.ExampleApplicationContext;
+
+import java.util.List;
+
+import net.hrkac.tweetnotebook.config.TweetNotebookApplicationContext;
 import net.hrkac.tweetnotebook.model.Note;
 
 import org.junit.Test;
@@ -24,7 +27,7 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {ExampleApplicationContext.class})
+@SpringApplicationConfiguration(classes = {TweetNotebookApplicationContext.class})
 @WebAppConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
@@ -66,6 +69,14 @@ public class NoteDaoIT {
     public void deleteById_NoteFound_ShouldDeleteNoteEntry() {
         Note deleted = noteDao.findOne(1L);
         noteDao.delete(deleted);
+    }
+    
+    @Test
+    @ExpectedDatabase("noteData.xml")
+    public void findByTitle_ListOfNotesFound_ShouldReturnListOfNotesWithTitle() {
+        List<Note> list = noteDao.findByTitle("Example 1");
+        assertNotNull(list);
+        assertThat(list, hasSize(greaterThan(0)));
     }
 
 }

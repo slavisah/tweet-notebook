@@ -28,11 +28,11 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 
-import net.hrkac.tweetnotebook.config.ExampleApplicationContext;
+import net.hrkac.tweetnotebook.config.TweetNotebookApplicationContext;
 import net.hrkac.tweetnotebook.config.TestUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {ExampleApplicationContext.class})
+@SpringApplicationConfiguration(classes = {TweetNotebookApplicationContext.class})
 @WebAppConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
