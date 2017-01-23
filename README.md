@@ -1,25 +1,24 @@
 Simple project for education
 ============================
 
-##Start application
+###How to start application
 
    - Without Maven Wrapper ```mvn spring-boot:run -Dspring.profiles.active=dev```
    
    - Using Maven Wrapper ```./mvnw spring-boot:run -Dspring.profiles.active=dev```
    
-##Stop application
+###How to stop application
 ```
 curl -X POST localhost:8080/shutdown
 ```
 
-##API design
-```
-http://localhost:8080/swagger-ui.html
-```
-
-##Run tests
+###How to run tests
 
    Unit tests: ```mvn test -P dev```
    
    Integration tests: ```mvn verify -P it```
 
+###API design
+```
+http://localhost:8080/swagger-ui.html
+```
