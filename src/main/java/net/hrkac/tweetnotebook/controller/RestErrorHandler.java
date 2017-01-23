@@ -67,7 +67,7 @@ public class RestErrorHandler {
 
     @ExceptionHandler(NoteNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleTodoNotFoundException(NoteNotFoundException ex) {
+    public void handleNoteNotFoundException(NoteNotFoundException ex) {
         LOGGER.debug("handling 404 error");
     }
 
